@@ -1,0 +1,6 @@
+framework module LineChart {
+  umbrella header "LineChart-umbrella.h"
+
+  export *
+  module * { export * }
+}

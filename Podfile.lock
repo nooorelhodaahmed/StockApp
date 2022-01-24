@@ -1,0 +1,39 @@
+PODS:
+  - Alamofire (4.9.1)
+  - AlamofireMapper (1.0.0):
+    - Alamofire (~> 4.1)
+  - Charts (3.6.0):
+    - Charts/Core (= 3.6.0)
+  - Charts/Core (3.6.0)
+  - CryptoSwift (1.4.2)
+  - LineChart (1.0.3)
+  - ProgressHUD (13.6)
+
+DEPENDENCIES:
+  - Alamofire
+  - AlamofireMapper
+  - Charts
+  - CryptoSwift (~> 1.4.1)
+  - LineChart
+  - ProgressHUD
+
+SPEC REPOS:
+  trunk:
+    - Alamofire
+    - AlamofireMapper
+    - Charts
+    - CryptoSwift
+    - LineChart
+    - ProgressHUD
+
+SPEC CHECKSUMS:
+  Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
+  AlamofireMapper: bdcd94eb53ab63ec9a12e4685bba73e3d0072f36
+  Charts: b1e3a1f5a1c9ba5394438ca3b91bd8c9076310af
+  CryptoSwift: a532e74ed010f8c95f611d00b8bbae42e9fe7c17
+  LineChart: de75393c5047512a39be45525a79e49d69b3c9bc
+  ProgressHUD: 4bdaa0d2ddf676b23324b199f9facffb5c3a1620
+
+PODFILE CHECKSUM: 8ac143848aa83997bcaa806202ed4e27f5431bd4
+
+COCOAPODS: 1.11.2

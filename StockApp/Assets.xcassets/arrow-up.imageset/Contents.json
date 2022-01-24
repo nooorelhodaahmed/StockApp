@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "green-up-arrow-icon-51.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
