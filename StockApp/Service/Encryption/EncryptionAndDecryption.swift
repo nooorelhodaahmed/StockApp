@@ -7,6 +7,7 @@
 
 import UIKit
 import CryptoSwift
+import ProgressHUD
 
 struct EncyptionAndDecryption {
     
@@ -18,6 +19,7 @@ struct EncyptionAndDecryption {
     
     func Encryption (data:String) -> String {
        
+        ProgressHUD.show()
         var encryptedData :String?
         
         do {
@@ -30,12 +32,14 @@ struct EncyptionAndDecryption {
         
         print(error)
     }
+      
         return encryptedData ?? ""
     }
     
     
     func Decryption(data: String) -> String {
-       
+        
+        
         var decryptesDataa :String?
         
         do {

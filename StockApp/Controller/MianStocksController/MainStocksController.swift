@@ -7,6 +7,7 @@
 
 import UIKit
 import CryptoSwift
+import ProgressHUD
 
 class MainStocksController: UIViewController{
    
@@ -45,6 +46,8 @@ class MainStocksController: UIViewController{
         sideMenuBackgroundView.isHidden = true
     }
     
+    //MARK:- binding of viewModel
+    
     func initvm() {
         
         viewModel.fetchData(period: "all")
@@ -65,7 +68,6 @@ class MainStocksController: UIViewController{
         alert.addAction( UIAlertAction(title: "Ok", style: .cancel, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
-   
 }
 
 //MARK:-UITbaleViewDelegate & UITableViewDatasource

@@ -16,12 +16,6 @@ class HomeViewModel {
         }
     }
     
-    var period : String? {
-        didSet{
-            self.getALLStockData()
-        }
-    }
-    
     var stockList : [Stocks]? {
         didSet{
             self.openStockView?()
@@ -30,6 +24,8 @@ class HomeViewModel {
     
     var showAlert:(()->())?
     var openStockView:(()->())?
+    
+    //MARK:- fetch handshake data
     
     func getHandShakeData() {
         
@@ -40,9 +36,4 @@ class HomeViewModel {
             }
         }
     }
-    
-    func getALLStockData() {
-       
-    }
-    
 }

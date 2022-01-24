@@ -6,10 +6,9 @@
 //
 
 import UIKit
-
 import Charts
 
-class StockDetailsController: UIViewController, ChartViewDelegate {
+class StockDetailsController: UIViewController{
     
     //MARK:- Proporties
     
@@ -49,8 +48,9 @@ class StockDetailsController: UIViewController, ChartViewDelegate {
         initVM()
         self.title = "Filled Line Chart"
         chartView.delegate = self
-        setUpchart()
     }
+    
+    //MARK:- binding of viewModel
     
     func initVM() {
         
@@ -68,19 +68,21 @@ class StockDetailsController: UIViewController, ChartViewDelegate {
             self?.xLabels = days
             guard let data = self?.viewModel.stockValues else {return}
             self?.data = data
-            //self?.setDataCount(xLabels, range: UInt32(data))
+            self?.setUpchart(xdata:data,ydata:self!.xLabels)
         }
     }
+    
+    //MARK:- intiate data for view
     
     func initView(){
         
         guard let stockDetails = viewModel.stockDetails else {return}
         self.price.text = self.price.text! + " " + String(Double((stockDetails.price?.roundToDecimal(2))!))
-        self.difference.text = self.difference.text! + " " + String(Double((stockDetails.difference?.roundToDecimal(2))!) * 100) + "%"
-        self.TransactionVolume.text =  self.TransactionVolume.text! + " " + String(Double((stockDetails.volume?.roundToDecimal(2))!))
+        self.difference.text = self.difference.text! + " " + String(Double((stockDetails.difference?.roundToDecimal(2))!)) + "%"
+        self.TransactionVolume.text =  self.TransactionVolume.text! + " " + String(Double((stockDetails.volume?.roundToDecimal(2))!)).prefix(3)
         self.buying.text = self.buying.text! + " " + String(Double((stockDetails.bid?.roundToDecimal(2))!))
         self.dailLow.text = self.dailLow.text! + " " + String(Double((stockDetails.lowest?.roundToDecimal(2))!))
-        self.dailyHigh.text = self.dailyHigh.text! + " " + String(Double((stockDetails.highest?.roundToDecimal(2))!))
+        self.dailyHigh.text = self.dailyHigh.text! + String(Double((stockDetails.highest?.roundToDecimal(2))!))
         self.celing.text = self.celing.text! + " " + String(Double((stockDetails.maximum?.roundToDecimal(2))!))
         self.base.text = self.base.text! + " " + String(Double((stockDetails.minimum?.roundToDecimal(2))!))
         self.sales.text = self.sales.text! + " " + String(Double((stockDetails.offer?.roundToDecimal(2))!))
@@ -100,97 +102,113 @@ class StockDetailsController: UIViewController, ChartViewDelegate {
 
 //MARK:- Chart
 
-extension StockDetailsController {
+extension StockDetailsController:ChartViewDelegate{
     
-    func setUpchart() {
-        
-        chartView.backgroundColor = .white
-        chartView.gridBackgroundColor = UIColor(red: 51/255, green: 181/255, blue: 229/255, alpha: 150/255)
-        chartView.drawGridBackgroundEnabled = true
-        chartView.drawBordersEnabled = true
-        chartView.chartDescription?.enabled = false
-        chartView.pinchZoomEnabled = false
-        chartView.dragEnabled = true
-        chartView.setScaleEnabled(true)
-        chartView.legend.enabled = false
-        chartView.xAxis.enabled = false
-        
-        let leftAxis = chartView.leftAxis
-        leftAxis.axisMaximum = 900
-        leftAxis.axisMinimum = -250
-        leftAxis.drawAxisLineEnabled = false
-        
-        chartView.rightAxis.enabled = false
-        
-        sliderX.value = 100
-        sliderY.value = 60
-        slidersValueChanged(nil)
+    func chartValueSelected(_ chartView: ChartViewBase, entry: ChartDataEntry, highlight: Highlight) {
+        chartView.drawMarkers = true
+        chartView.setNeedsDisplay()
     }
     
-    
-    func updateChartData() {
-     /*  if self.shouldHideData {
-           chartView.data = nil
-           return
-       }*/
-       
-       self.setDataCount(Int(sliderX.value), range: UInt32(sliderY.value))
-   }
-   
-   func setDataCount(_ count: Int, range: UInt32) {
-       let yVals1 = (0..<count).map { (i) -> ChartDataEntry in
-           let val = Double(arc4random_uniform(range) + 50)
-           return ChartDataEntry(x: Double(i), y: val)
-       }
-       let yVals2 = (0..<count).map { (i) -> ChartDataEntry in
-           let val = Double(arc4random_uniform(range) + 450)
-           return ChartDataEntry(x: Double(i), y: val)
-       }
-       
-       let set1 = LineChartDataSet(entries: yVals1, label: "DataSet 1")
-       set1.axisDependency = .left
-       set1.setColor(UIColor(red: 255/255, green: 241/255, blue: 46/255, alpha: 1))
-       set1.drawCirclesEnabled = false
-       set1.lineWidth = 2
-       set1.circleRadius = 3
-       set1.fillAlpha = 1
-       set1.drawFilledEnabled = true
-       set1.fillColor = .white
-       set1.highlightColor = UIColor(red: 244/255, green: 117/255, blue: 117/255, alpha: 1)
-       set1.drawCircleHoleEnabled = false
-       set1.fillFormatter = DefaultFillFormatter { _,_  -> CGFloat in
-           return CGFloat(self.chartView.leftAxis.axisMinimum)
-       }
-       
-       let set2 = LineChartDataSet(entries: yVals2, label: "DataSet 2")
-       set2.axisDependency = .left
-       set2.setColor(UIColor(red: 255/255, green: 241/255, blue: 46/255, alpha: 1))
-       set2.drawCirclesEnabled = false
-       set2.lineWidth = 2
-       set2.circleRadius = 3
-       set2.fillAlpha = 1
-       set2.drawFilledEnabled = true
-       set2.fillColor = .white
-       set2.highlightColor = UIColor(red: 244/255, green: 117/255, blue: 117/255, alpha: 1)
-       set2.drawCircleHoleEnabled = false
-       set2.fillFormatter = DefaultFillFormatter { _,_  -> CGFloat in
-           return CGFloat(self.chartView.leftAxis.axisMaximum)
-       }
+    func setUpchart(xdata:[Double],ydata:[String]) {
+        
+        chartView.delegate = self
+        chartView.chartDescription?.enabled = false
+        chartView.dragEnabled = true
+        chartView.setScaleEnabled(true)
+        chartView.pinchZoomEnabled = true
+        
+        // x-axis limit line
+        let llXAxis = ChartLimitLine(limit: 10, label: "Index 1")
+        llXAxis.lineWidth = 4
+        llXAxis.lineDashLengths = [10, 10, 0]
+        llXAxis.labelPosition = .bottomRight
+        llXAxis.valueFont = .systemFont(ofSize: 10)
 
-       let data =  LineChartData()
-       data.addDataSet(set1)
-       data.addDataSet(set2)
-       data.setDrawValues(false)
-       
-       chartView.data = data
-   }
+        chartView.xAxis.gridLineDashLengths = [10, 10]
+        chartView.xAxis.gridLineDashPhase = 0
+
+        let ll1 = ChartLimitLine(limit: xdata.max()!, label: "Upper Limit")
+        ll1.lineWidth = 4
+        ll1.lineDashLengths = [5, 5]
+        ll1.labelPosition = .bottomRight
+        ll1.valueFont = .systemFont(ofSize: 10)
+
+        let leftAxis = chartView.leftAxis
+        leftAxis.removeAllLimitLines()
+        leftAxis.addLimitLine(ll1)
+        leftAxis.axisMaximum = xdata.max()!
+        leftAxis.axisMinimum = xdata.min()!
+        leftAxis.gridLineDashLengths = [5, 5]
+        leftAxis.drawLimitLinesBehindDataEnabled = true
+        
+        chartView.rightAxis.enabled = false
+
+        let marker = MarkerView(frame: CGRect(x: 8, y: 8, width: 80, height: 40))
+        chartView.marker = marker
+        chartView.drawMarkers = true
+        chartView.legend.form = .line
+
+        sliderX.value = 15
+        sliderX.maximumValue = 30
+        sliderY.value = 30
+        slidersValueChanged(nil)
+
+        chartView.animate(xAxisDuration: 2.5)
+    }
+    
+     func updateChartData() {
+        self.setDataCount(Int(sliderX.value), range: UInt32(sliderY.value))
+    }
+
+    func setDataCount(_ count: Int, range: UInt32) {
+        
+       let values = (0..<count).map { (i) -> ChartDataEntry in
+       let val = self.data[i]
+            return ChartDataEntry(x: Double(i), y: val)
+        }
+    
+        let set1 = LineChartDataSet(entries: values, label: "Days")
+        set1.drawIconsEnabled = true
+        setup(set1)
+
+        let gradientColors = [ChartColorTemplates.colorFromString("#00ff0000").cgColor,ChartColorTemplates.colorFromString("#ffff0000").cgColor]
+        let gradient = CGGradient(colorsSpace: nil, colors: gradientColors as CFArray, locations: nil)!
+
+        set1.fillAlpha = 0.8
+        set1.fill = Fill(linearGradient: gradient, angle: 90)
+        
+        let data = LineChartData(dataSet: set1)
+        chartView.data = data
+        
+        guard let dataa = chartView.data else { return }
+        for case let set as LineChartDataSet in  dataa.dataSets {
+            set.drawFilledEnabled = !set.drawFilledEnabled
+        }
+        chartView.setNeedsDisplay()
+    }
+
+    private func setup(_ dataSet: LineChartDataSet) {
+        
+            dataSet.lineDashLengths = [5, 2.5]
+            dataSet.highlightLineDashLengths = [5, 2.5]
+            dataSet.setColors(.black, .red, .white)
+            dataSet.setCircleColor(.black)
+            dataSet.lineWidth = 1
+            dataSet.circleRadius = 4
+            dataSet.drawCircleHoleEnabled = false
+            dataSet.valueFont = .systemFont(ofSize: 9)
+            dataSet.formLineDashLengths = [5, 2.5]
+            dataSet.formLineWidth = 1
+            dataSet.formSize = 15
+    }
    
-   @IBAction func slidersValueChanged(_ sender: Any?) {
-       sliderTextX.text = "\(Int(sliderX.value))"
-       sliderTextY.text = "\(Int(sliderY.value))"
-       
-       self.updateChartData()
-   }
+    @IBAction func slidersValueChanged(_ sender: Any?) {
+        sliderTextX.text = "\(Int(sliderX.value))"
+        sliderTextY.text = "\(Int(sliderY.value))"
+
+        self.updateChartData()
+    }
 }
+
 
 

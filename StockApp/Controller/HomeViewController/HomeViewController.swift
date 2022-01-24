@@ -18,7 +18,7 @@ class HomeViewController: UIViewController {
       
        initvm()
     }
-    
+    //MARK:- binding of viewModel
     func initvm(){
         
         viewModel.getHandShakeData()

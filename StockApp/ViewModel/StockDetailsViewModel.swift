@@ -14,10 +14,12 @@ class StockDetailsViewModel {
     var symbolValue: String?
     var stockDays = [String]()
     var stockValues = [Double]()
-    
+    var graphData = [GraphicData]()
     var reloadData :(()->())?
     var reloadGraghData :(()->())?
     var setSymbolValue : (()->())?
+    
+    //MARK:- fetch detils of stock
     
     func fetchSelectedStockDetails(id:Int)  {
        
@@ -35,6 +37,7 @@ class StockDetailsViewModel {
             }
         }
     }
+    //MARK:- decryption for symbol value
     
     func fetchSymbolValue(symbol:String){
         
@@ -47,10 +50,11 @@ class StockDetailsViewModel {
     
     func setGraphData(data:[GraphicData]) {
         
+        self.graphData = data
         for graph in data {
             
             stockDays.append(String(graph.day!))
-            stockValues.append((graph.value?.roundToDecimal(2))!)
+            stockValues.append(((graph.value?.roundToDecimal(2))!))
         }
         self.reloadGraghData?()
     }

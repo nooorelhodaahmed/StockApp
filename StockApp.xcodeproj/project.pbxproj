@@ -191,16 +191,15 @@
 		AF3AFF172799B287000718F0 /* StockApp */ = {
 			isa = PBXGroup;
 			children = (
+				AF3AFF182799B287000718F0 /* AppDelegate.swift */,
+				AF3AFF1A2799B287000718F0 /* SceneDelegate.swift */,
 				AF3AFF5B279AB333000718F0 /* Controller */,
 				AF3AFF5A279AB321000718F0 /* View */,
 				AF198ECC279CB66A00246D55 /* ViewModel */,
 				AF3AFF3C279AAC86000718F0 /* Models */,
-				AF3AFF332799BD94000718F0 /* Utilities */,
 				AF198EB8279C112C00246D55 /* Service */,
-				AF3AFF182799B287000718F0 /* AppDelegate.swift */,
-				AF3AFF1A2799B287000718F0 /* SceneDelegate.swift */,
-				AF3AFF1E2799B287000718F0 /* Main.storyboard */,
-				AF3AFF262799B289000718F0 /* LaunchScreen.storyboard */,
+				AF3AFF332799BD94000718F0 /* Utilities */,
+				AF82A061279EFCB500F3BA13 /* Storyboard */,
 				AF3AFF242799B289000718F0 /* Assets.xcassets */,
 				AF3AFF292799B289000718F0 /* Info.plist */,
 				AF3AFF212799B287000718F0 /* StockApp.xcdatamodeld */,
@@ -256,6 +255,15 @@
 				AF198E8F279B3EBF00246D55 /* StocksDetailsController */,
 			);
 			path = Controller;
+			sourceTree = "<group>";
+		};
+		AF82A061279EFCB500F3BA13 /* Storyboard */ = {
+			isa = PBXGroup;
+			children = (
+				AF3AFF1E2799B287000718F0 /* Main.storyboard */,
+				AF3AFF262799B289000718F0 /* LaunchScreen.storyboard */,
+			);
+			path = Storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
